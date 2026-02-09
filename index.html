@@ -3,289 +3,348 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Harper - Landing</title>
+  <title>Harper</title>
   <style>
     :root{
-      --bg1:#f7f9fc;
-      --bg2:#eef3f9;
-      --ink:#111827;
-      --muted:#6b7280;
-      --btn:#111827;
-      --btnText:#ffffff;
-      --card:#ffffffcc;
-      --shadow: 0 10px 30px rgba(17,24,39,.08);
+      --ink:#0b1220;
+      --muted:#5b667a;
+      --line:rgba(11,18,32,.10);
+      --glass:rgba(255,255,255,.72);
+      --shadow: 0 18px 40px rgba(11,18,32,.10);
+      --btn:#0b1220;
+      --btnText:#fff;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
       color:var(--ink);
-      background: radial-gradient(1200px 600px at 20% 10%, #ffffff 0%, var(--bg1) 55%, var(--bg2) 100%);
+      background:#f5f7fb;
       min-height:100vh;
     }
 
+    /* ====== Background (premium wave / soft light) ====== */
+    .bg{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      background:
+        radial-gradient(1200px 700px at 70% 15%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 55%),
+        radial-gradient(900px 520px at 10% 85%, rgba(255,255,255,.75) 0%, rgba(255,255,255,0) 60%),
+        linear-gradient(135deg, #f9fbff 0%, #eef3fb 55%, #eaf0fb 100%);
+    }
+    .bg::before, .bg::after{
+      content:"";
+      position:absolute;
+      inset:-30%;
+      filter: blur(24px);
+      opacity:.85;
+      transform: rotate(8deg);
+      background:
+        radial-gradient(closest-side, rgba(56,189,248,.18), rgba(56,189,248,0) 70%),
+        radial-gradient(closest-side, rgba(99,102,241,.16), rgba(99,102,241,0) 70%),
+        radial-gradient(closest-side, rgba(16,185,129,.10), rgba(16,185,129,0) 70%);
+    }
+    .bg::after{
+      inset:-45%;
+      opacity:.55;
+      transform: rotate(-10deg);
+    }
+
+    /* ====== Layout ====== */
     .wrap{
       min-height:100vh;
       display:flex;
-      align-items:center;
       justify-content:center;
-      padding:32px 18px;
+      padding: 28px 18px 60px;
+    }
+    .container{
+      width:min(1120px, 100%);
     }
 
-    .hero{
-      width:min(1100px, 100%);
-      height:min(520px, 72vh);
-      border-radius:20px;
-      position:relative;
-      overflow:hidden;
-      background:
-        radial-gradient(900px 420px at 75% 20%, rgba(255,255,255,.9) 0%, rgba(255,255,255,0) 60%),
-        radial-gradient(700px 340px at 10% 80%, rgba(255,255,255,.7) 0%, rgba(255,255,255,0) 65%),
-        linear-gradient(135deg, #f8fafc 0%, #eef2f7 45%, #e9eff7 100%);
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(17,24,39,.06);
-    }
-
-    /* subtle wave layers */
-    .hero::before, .hero::after{
-      content:"";
-      position:absolute; inset:-40%;
-      background:
-        radial-gradient(closest-side, rgba(59,130,246,.10), rgba(59,130,246,0) 70%),
-        radial-gradient(closest-side, rgba(16,185,129,.08), rgba(16,185,129,0) 70%),
-        radial-gradient(closest-side, rgba(99,102,241,.10), rgba(99,102,241,0) 70%);
-      transform: rotate(8deg);
-      filter: blur(20px);
-      opacity:.75;
-    }
-    .hero::after{
-      inset:-55%;
-      transform: rotate(-10deg);
-      opacity:.55;
-    }
-
-    .topbar{
-      position:absolute;
-      left:24px; right:24px; top:18px;
+    /* ====== Top Nav ====== */
+    header{
       display:flex;
-      align-items:flex-start;
+      align-items:center;
       justify-content:space-between;
-      z-index:2;
+      gap:16px;
+      padding: 14px 4px 22px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.12em;
+      font-size:13px;
+    }
+    .mark{
+      width:32px;height:32px;border-radius:10px;
+      background: rgba(11,18,32,.06);
+      border: 1px solid var(--line);
+      display:grid;place-items:center;
+      font-weight:900;
+    }
+    nav{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      color:var(--muted);
+      font-weight:700;
+      font-size:13px;
+    }
+    nav a{
+      color:inherit;
+      text-decoration:none;
+      padding:8px 10px;
+      border-radius:10px;
+    }
+    nav a:hover{
+      background: rgba(11,18,32,.05);
+      color:var(--ink);
+    }
+
+    /* ====== Hero Card ====== */
+    .hero{
+      position:relative;
+      border-radius:22px;
+      overflow:hidden;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      background:
+        radial-gradient(900px 520px at 72% 25%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 55%),
+        linear-gradient(135deg, rgba(255,255,255,.65) 0%, rgba(255,255,255,.35) 100%);
+      backdrop-filter: blur(10px);
+    }
+
+    /* inner wave highlight */
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-25%;
+      background:
+        radial-gradient(closest-side, rgba(255,255,255,.85), rgba(255,255,255,0) 70%),
+        radial-gradient(closest-side, rgba(11,18,32,.06), rgba(11,18,32,0) 72%);
+      transform: rotate(6deg);
+      opacity:.75;
+      filter: blur(18px);
       pointer-events:none;
     }
-    .brand{
-      pointer-events:auto;
-      font-weight:700;
-      letter-spacing:.08em;
-      font-size:14px;
-      color:#111827cc;
-    }
-    .badge{
-      pointer-events:auto;
-      font-size:11px;
-      font-weight:700;
-      padding:8px 10px;
-      border-radius:999px;
-      background:rgba(17,24,39,.06);
-      color:#111827cc;
-      border:1px solid rgba(17,24,39,.08);
-    }
 
-    .slide{
-      position:absolute; inset:0;
-      display:flex;
+    .hero-inner{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 22px;
+      padding: clamp(22px, 4vw, 46px);
+      min-height: 520px;
       align-items:center;
-      justify-content:center;
-      padding:70px 24px 60px;
+      position:relative;
       z-index:1;
-      opacity:0;
-      transform: translateY(8px);
-      transition: opacity .35s ease, transform .35s ease;
-    }
-    .slide.active{
-      opacity:1;
-      transform: translateY(0);
     }
 
-    .content{
-      width:min(760px, 100%);
-      text-align:center;
-      padding:28px 26px;
-      border-radius:18px;
-      background: var(--card);
-      border: 1px solid rgba(17,24,39,.06);
-      backdrop-filter: blur(8px);
+    /* ====== Copy ====== */
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      color: rgba(11,18,32,.78);
+      font-weight:800;
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(11,18,32,.10);
     }
     h1{
-      margin:0 0 10px;
-      font-size: clamp(26px, 4vw, 42px);
-      letter-spacing:-0.02em;
+      margin:14px 0 12px;
+      font-size: clamp(34px, 4.6vw, 56px);
+      line-height:1.08;
+      letter-spacing:-0.03em;
     }
-    p{
-      margin:0 auto 18px;
-      max-width: 640px;
-      line-height:1.65;
-      color:var(--muted);
-      font-size: clamp(13px, 1.6vw, 15px);
+    .desc{
+      margin:0 0 22px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height:1.8;
+      max-width: 560px;
+    }
+
+    /* ====== CTA ====== */
+    .cta{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
     }
     .btn{
       display:inline-flex;
       align-items:center;
-      gap:8px;
-      padding:12px 16px;
-      background:var(--btn);
-      color:var(--btnText);
-      border-radius:10px;
+      gap:10px;
+      padding: 12px 16px;
+      border-radius: 12px;
       text-decoration:none;
-      font-weight:700;
-      border:1px solid rgba(0,0,0,.12);
+      font-weight:800;
+      border: 1px solid rgba(0,0,0,.12);
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+      user-select:none;
     }
-    .btn:hover{ transform: translateY(-1px); }
-    .btn:active{ transform: translateY(0); }
+    .btn.primary{
+      background: var(--btn);
+      color: var(--btnText);
+      box-shadow: 0 14px 30px rgba(11,18,32,.18);
+    }
+    .btn.primary:hover{ transform: translateY(-1px); }
+    .btn.secondary{
+      background: rgba(255,255,255,.66);
+      color: var(--ink);
+      border: 1px solid rgba(11,18,32,.12);
+    }
+    .btn.secondary:hover{ transform: translateY(-1px); }
 
-    .nav{
-      position:absolute;
-      top:50%;
-      transform: translateY(-50%);
-      width:44px; height:44px;
-      border-radius:999px;
-      border:1px solid rgba(17,24,39,.10);
-      background: rgba(255,255,255,.78);
-      backdrop-filter: blur(8px);
+    /* ====== Right Panel ====== */
+    .panel{
+      justify-self:end;
+      width:min(420px, 100%);
+      border-radius: 18px;
+      border: 1px solid rgba(11,18,32,.10);
+      background: rgba(255,255,255,.65);
+      backdrop-filter: blur(10px);
+      padding: 18px;
+    }
+    .panel h3{
+      margin:0 0 10px;
+      font-size:14px;
+      letter-spacing:-0.01em;
+    }
+    .list{
+      margin:0;
+      padding:0;
+      list-style:none;
       display:grid;
-      place-items:center;
-      cursor:pointer;
-      z-index:3;
-      box-shadow: 0 8px 20px rgba(17,24,39,.08);
+      gap:10px;
     }
-    .nav.left{ left:16px; }
-    .nav.right{ right:16px; }
-    .nav svg{ width:18px; height:18px; opacity:.85; }
-    .nav:hover{ background: rgba(255,255,255,.92); }
-
-    .dots{
-      position:absolute;
-      left:0; right:0; bottom:18px;
+    .item{
       display:flex;
-      gap:8px;
-      justify-content:center;
-      z-index:3;
+      gap:10px;
+      align-items:flex-start;
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(11,18,32,.08);
     }
     .dot{
-      width:8px; height:8px;
-      border-radius:999px;
-      background: rgba(17,24,39,.22);
-      border:1px solid rgba(17,24,39,.10);
-      cursor:pointer;
+      width:10px;height:10px;border-radius:999px;
+      background: rgba(11,18,32,.65);
+      margin-top: 6px;
+      flex: 0 0 auto;
     }
-    .dot.active{ background: rgba(17,24,39,.70); }
+    .item b{ font-size:13px; }
+    .item span{
+      display:block;
+      margin-top:3px;
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.55;
+    }
 
-    @media (max-width:520px){
-      .content{ padding:22px 18px; }
-      .topbar{ left:16px; right:16px; }
+    /* ====== Footer strip ====== */
+    .strip{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      padding: 14px 18px;
+      border-top: 1px solid rgba(11,18,32,.08);
+      color: rgba(11,18,32,.65);
+      font-size:12px;
+      font-weight:700;
+      background: rgba(255,255,255,.40);
+      backdrop-filter: blur(10px);
+    }
+    .strip a{ color:inherit; text-decoration:none; }
+    .strip a:hover{ color: var(--ink); }
+
+    /* ====== Responsive ====== */
+    @media (max-width: 900px){
+      .hero-inner{ grid-template-columns: 1fr; min-height: unset; }
+      .panel{ justify-self:stretch; }
+      nav{ display:none; } /* 필요하면 살려도 됨 */
     }
   </style>
 </head>
 
 <body>
+  <div class="bg" aria-hidden="true"></div>
+
   <div class="wrap">
-    <section class="hero" aria-label="Hero Slider">
-      <div class="topbar">
-        <div class="brand">HARPER</div>
-        <div class="badge">VC / INVESTMENT</div>
-      </div>
-
-      <!-- Left / Right -->
-      <button class="nav left" id="prev" aria-label="Previous">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M15 18l-6-6 6-6"/>
-        </svg>
-      </button>
-      <button class="nav right" id="next" aria-label="Next">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 6l6 6-6 6"/>
-        </svg>
-      </button>
-
-      <!-- Slides -->
-      <div class="slide active">
-        <div class="content">
-          <h1>자료는 가볍게. 검토는 깊게.</h1>
-          <p>
-            투자 판단에 필요한 핵심만 빠르게 모으고,
-            딜의 리스크와 업사이드를 구조적으로 파고듭니다.
-          </p>
-          <a class="btn" href="#" onclick="alert('버튼 클릭!'); return false;">
-            투자 제안하기 <span aria-hidden="true">→</span>
-          </a>
+    <div class="container">
+      <header>
+        <div class="logo">
+          <div class="mark">H</div>
+          <div>HARPER</div>
         </div>
-      </div>
+        <nav>
+          <a href="#about">About</a>
+          <a href="#focus">Focus</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </header>
 
-      <div class="slide">
-        <div class="content">
-          <h1>한 장으로 끝나는 딜 브리핑.</h1>
-          <p>
-            시장/문제/해결/경쟁력/리스크를 한 장 구조로 정리하고,
-            미팅에서 바로 쓰는 질문까지 뽑습니다.
-          </p>
-          <a class="btn" href="#" onclick="alert('연락 링크 연결하면 됨'); return false;">
-            소개서 받기 <span aria-hidden="true">→</span>
-          </a>
+      <section class="hero">
+        <div class="hero-inner">
+          <div>
+            <div class="kicker">SYNERGY-CORE STYLE · PREMIUM</div>
+            <h1>자료는 가볍게.<br/>검토는 깊게.</h1>
+            <p class="desc">
+              핵심 정보만 빠르게 모으고, 리스크·업사이드·검증 질문을 구조적으로 정리합니다.
+              미팅에서 바로 쓰는 한 장 요약으로 연결합니다.
+            </p>
+
+            <div class="cta">
+              <!-- 버튼 링크는 원하는 곳으로 교체 -->
+              <a class="btn primary" href="#contact">투자 제안하기 →</a>
+              <a class="btn secondary" href="#about">소개서 보기</a>
+            </div>
+          </div>
+
+          <aside class="panel" id="focus">
+            <h3>검토 프레임</h3>
+            <ul class="list">
+              <li class="item">
+                <div class="dot"></div>
+                <div>
+                  <b>Problem → Why now</b>
+                  <span>시장 구조 변화·규제·기술 파편화 등 “왜 지금”을 한 문장으로.</span>
+                </div>
+              </li>
+              <li class="item">
+                <div class="dot"></div>
+                <div>
+                  <b>Moat &amp; Execution</b>
+                  <span>재현 가능한 운영/데이터/채널의 축적이 있는지 확인.</span>
+                </div>
+              </li>
+              <li class="item">
+                <div class="dot"></div>
+                <div>
+                  <b>Risk &amp; Next Proof</b>
+                  <span>다음 라운드 전까지 “증명해야 할 것”을 명확히 정의.</span>
+                </div>
+              </li>
+            </ul>
+          </aside>
         </div>
-      </div>
 
-      <div class="slide">
-        <div class="content">
-          <h1>데이터로 리서치를 자동화.</h1>
-          <p>
-            크롤링·정리·비교·하이라이트까지 자동으로 굴려서
-            “새로 들어온 것”만 빠르게 확인합니다.
-          </p>
-          <a class="btn" href="#" onclick="alert('포트폴리오 링크로 교체 가능'); return false;">
-            포트폴리오 보기 <span aria-hidden="true">→</span>
-          </a>
+        <div class="strip" id="contact">
+          <div>© Harper</div>
+          <!-- 아래 링크는 네 걸로 바꿔 -->
+          <a href="mailto:you@example.com">you@example.com</a>
+          <a href="#" onclick="alert('링크 교체하면 됨'); return false;">LinkedIn</a>
+          <a href="#" onclick="alert('노션/포폴 링크로 교체'); return false;">Portfolio</a>
         </div>
-      </div>
-
-      <!-- Dots -->
-      <div class="dots" id="dots"></div>
-    </section>
+      </section>
+    </div>
   </div>
-
-  <script>
-    const slides = Array.from(document.querySelectorAll(".slide"));
-    const dotsWrap = document.getElementById("dots");
-    const prev = document.getElementById("prev");
-    const next = document.getElementById("next");
-
-    let idx = 0;
-    const makeDots = () => {
-      dotsWrap.innerHTML = "";
-      slides.forEach((_, i) => {
-        const d = document.createElement("div");
-        d.className = "dot" + (i === idx ? " active" : "");
-        d.addEventListener("click", () => go(i));
-        dotsWrap.appendChild(d);
-      });
-    };
-
-    const render = () => {
-      slides.forEach((s, i) => s.classList.toggle("active", i === idx));
-      Array.from(dotsWrap.children).forEach((d, i) => d.classList.toggle("active", i === idx));
-    };
-
-    const go = (i) => {
-      idx = (i + slides.length) % slides.length;
-      render();
-    };
-
-    prev.addEventListener("click", () => go(idx - 1));
-    next.addEventListener("click", () => go(idx + 1));
-
-    // auto play (원치 않으면 아래 3줄 삭제)
-    setInterval(() => go(idx + 1), 5500);
-
-    makeDots();
-  </script>
 </body>
 </html>
