@@ -1,12 +1,291 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>Harper 페이지</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Harper - Landing</title>
+  <style>
+    :root{
+      --bg1:#f7f9fc;
+      --bg2:#eef3f9;
+      --ink:#111827;
+      --muted:#6b7280;
+      --btn:#111827;
+      --btnText:#ffffff;
+      --card:#ffffffcc;
+      --shadow: 0 10px 30px rgba(17,24,39,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      color:var(--ink);
+      background: radial-gradient(1200px 600px at 20% 10%, #ffffff 0%, var(--bg1) 55%, var(--bg2) 100%);
+      min-height:100vh;
+    }
+
+    .wrap{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px 18px;
+    }
+
+    .hero{
+      width:min(1100px, 100%);
+      height:min(520px, 72vh);
+      border-radius:20px;
+      position:relative;
+      overflow:hidden;
+      background:
+        radial-gradient(900px 420px at 75% 20%, rgba(255,255,255,.9) 0%, rgba(255,255,255,0) 60%),
+        radial-gradient(700px 340px at 10% 80%, rgba(255,255,255,.7) 0%, rgba(255,255,255,0) 65%),
+        linear-gradient(135deg, #f8fafc 0%, #eef2f7 45%, #e9eff7 100%);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(17,24,39,.06);
+    }
+
+    /* subtle wave layers */
+    .hero::before, .hero::after{
+      content:"";
+      position:absolute; inset:-40%;
+      background:
+        radial-gradient(closest-side, rgba(59,130,246,.10), rgba(59,130,246,0) 70%),
+        radial-gradient(closest-side, rgba(16,185,129,.08), rgba(16,185,129,0) 70%),
+        radial-gradient(closest-side, rgba(99,102,241,.10), rgba(99,102,241,0) 70%);
+      transform: rotate(8deg);
+      filter: blur(20px);
+      opacity:.75;
+    }
+    .hero::after{
+      inset:-55%;
+      transform: rotate(-10deg);
+      opacity:.55;
+    }
+
+    .topbar{
+      position:absolute;
+      left:24px; right:24px; top:18px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      z-index:2;
+      pointer-events:none;
+    }
+    .brand{
+      pointer-events:auto;
+      font-weight:700;
+      letter-spacing:.08em;
+      font-size:14px;
+      color:#111827cc;
+    }
+    .badge{
+      pointer-events:auto;
+      font-size:11px;
+      font-weight:700;
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(17,24,39,.06);
+      color:#111827cc;
+      border:1px solid rgba(17,24,39,.08);
+    }
+
+    .slide{
+      position:absolute; inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:70px 24px 60px;
+      z-index:1;
+      opacity:0;
+      transform: translateY(8px);
+      transition: opacity .35s ease, transform .35s ease;
+    }
+    .slide.active{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    .content{
+      width:min(760px, 100%);
+      text-align:center;
+      padding:28px 26px;
+      border-radius:18px;
+      background: var(--card);
+      border: 1px solid rgba(17,24,39,.06);
+      backdrop-filter: blur(8px);
+    }
+    h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 4vw, 42px);
+      letter-spacing:-0.02em;
+    }
+    p{
+      margin:0 auto 18px;
+      max-width: 640px;
+      line-height:1.65;
+      color:var(--muted);
+      font-size: clamp(13px, 1.6vw, 15px);
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:12px 16px;
+      background:var(--btn);
+      color:var(--btnText);
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:700;
+      border:1px solid rgba(0,0,0,.12);
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0); }
+
+    .nav{
+      position:absolute;
+      top:50%;
+      transform: translateY(-50%);
+      width:44px; height:44px;
+      border-radius:999px;
+      border:1px solid rgba(17,24,39,.10);
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(8px);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      z-index:3;
+      box-shadow: 0 8px 20px rgba(17,24,39,.08);
+    }
+    .nav.left{ left:16px; }
+    .nav.right{ right:16px; }
+    .nav svg{ width:18px; height:18px; opacity:.85; }
+    .nav:hover{ background: rgba(255,255,255,.92); }
+
+    .dots{
+      position:absolute;
+      left:0; right:0; bottom:18px;
+      display:flex;
+      gap:8px;
+      justify-content:center;
+      z-index:3;
+    }
+    .dot{
+      width:8px; height:8px;
+      border-radius:999px;
+      background: rgba(17,24,39,.22);
+      border:1px solid rgba(17,24,39,.10);
+      cursor:pointer;
+    }
+    .dot.active{ background: rgba(17,24,39,.70); }
+
+    @media (max-width:520px){
+      .content{ padding:22px 18px; }
+      .topbar{ left:16px; right:16px; }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>🔥 깃허브 페이지 성공</h1>
-  <p>harper1120의 첫 페이지</p>
+  <div class="wrap">
+    <section class="hero" aria-label="Hero Slider">
+      <div class="topbar">
+        <div class="brand">HARPER</div>
+        <div class="badge">VC / INVESTMENT</div>
+      </div>
+
+      <!-- Left / Right -->
+      <button class="nav left" id="prev" aria-label="Previous">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <button class="nav right" id="next" aria-label="Next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 6l6 6-6 6"/>
+        </svg>
+      </button>
+
+      <!-- Slides -->
+      <div class="slide active">
+        <div class="content">
+          <h1>자료는 가볍게. 검토는 깊게.</h1>
+          <p>
+            투자 판단에 필요한 핵심만 빠르게 모으고,
+            딜의 리스크와 업사이드를 구조적으로 파고듭니다.
+          </p>
+          <a class="btn" href="#" onclick="alert('버튼 클릭!'); return false;">
+            투자 제안하기 <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="slide">
+        <div class="content">
+          <h1>한 장으로 끝나는 딜 브리핑.</h1>
+          <p>
+            시장/문제/해결/경쟁력/리스크를 한 장 구조로 정리하고,
+            미팅에서 바로 쓰는 질문까지 뽑습니다.
+          </p>
+          <a class="btn" href="#" onclick="alert('연락 링크 연결하면 됨'); return false;">
+            소개서 받기 <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="slide">
+        <div class="content">
+          <h1>데이터로 리서치를 자동화.</h1>
+          <p>
+            크롤링·정리·비교·하이라이트까지 자동으로 굴려서
+            “새로 들어온 것”만 빠르게 확인합니다.
+          </p>
+          <a class="btn" href="#" onclick="alert('포트폴리오 링크로 교체 가능'); return false;">
+            포트폴리오 보기 <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Dots -->
+      <div class="dots" id="dots"></div>
+    </section>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const dotsWrap = document.getElementById("dots");
+    const prev = document.getElementById("prev");
+    const next = document.getElementById("next");
+
+    let idx = 0;
+    const makeDots = () => {
+      dotsWrap.innerHTML = "";
+      slides.forEach((_, i) => {
+        const d = document.createElement("div");
+        d.className = "dot" + (i === idx ? " active" : "");
+        d.addEventListener("click", () => go(i));
+        dotsWrap.appendChild(d);
+      });
+    };
+
+    const render = () => {
+      slides.forEach((s, i) => s.classList.toggle("active", i === idx));
+      Array.from(dotsWrap.children).forEach((d, i) => d.classList.toggle("active", i === idx));
+    };
+
+    const go = (i) => {
+      idx = (i + slides.length) % slides.length;
+      render();
+    };
+
+    prev.addEventListener("click", () => go(idx - 1));
+    next.addEventListener("click", () => go(idx + 1));
+
+    // auto play (원치 않으면 아래 3줄 삭제)
+    setInterval(() => go(idx + 1), 5500);
+
+    makeDots();
+  </script>
 </body>
 </html>
