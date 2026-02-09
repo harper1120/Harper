@@ -1,350 +1,288 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Harper</title>
+  <title>Harper | Investment Proposal</title>
+
   <style>
     :root{
-      --ink:#0b1220;
-      --muted:#5b667a;
-      --line:rgba(11,18,32,.10);
-      --glass:rgba(255,255,255,.72);
-      --shadow: 0 18px 40px rgba(11,18,32,.10);
-      --btn:#0b1220;
-      --btnText:#fff;
+      --bg:#0b0f17;
+      --panel:#0f1623;
+      --line:rgba(255,255,255,.10);
+      --text:#e7ecf6;
+      --muted:rgba(231,236,246,.65);
+      --field:#0c1320;
+      --focus:rgba(56,189,248,.55);
+      --btn:#e7ecf6;
+      --btnText:#0b0f17;
     }
+
     *{box-sizing:border-box}
+
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-      color:var(--ink);
-      background:#f5f7fb;
-      min-height:100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans KR",
+        "Apple SD Gothic Neo","Malgun Gothic", Arial, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 70% 10%, rgba(255,255,255,.06), rgba(255,255,255,0) 55%),
+        linear-gradient(180deg, #070a10, var(--bg));
+      color:var(--text);
     }
 
-    /* ====== Background (premium wave / soft light) ====== */
-    .bg{
-      position:fixed;
-      inset:0;
-      z-index:-1;
-      background:
-        radial-gradient(1200px 700px at 70% 15%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 55%),
-        radial-gradient(900px 520px at 10% 85%, rgba(255,255,255,.75) 0%, rgba(255,255,255,0) 60%),
-        linear-gradient(135deg, #f9fbff 0%, #eef3fb 55%, #eaf0fb 100%);
-    }
-    .bg::before, .bg::after{
-      content:"";
-      position:absolute;
-      inset:-30%;
-      filter: blur(24px);
-      opacity:.85;
-      transform: rotate(8deg);
-      background:
-        radial-gradient(closest-side, rgba(56,189,248,.18), rgba(56,189,248,0) 70%),
-        radial-gradient(closest-side, rgba(99,102,241,.16), rgba(99,102,241,0) 70%),
-        radial-gradient(closest-side, rgba(16,185,129,.10), rgba(16,185,129,0) 70%);
-    }
-    .bg::after{
-      inset:-45%;
-      opacity:.55;
-      transform: rotate(-10deg);
-    }
-
-    /* ====== Layout ====== */
     .wrap{
       min-height:100vh;
       display:flex;
       justify-content:center;
-      padding: 28px 18px 60px;
-    }
-    .container{
-      width:min(1120px, 100%);
+      padding:48px 16px;
     }
 
-    /* ====== Top Nav ====== */
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      padding: 14px 4px 22px;
-    }
-    .logo{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:800;
-      letter-spacing:.12em;
-      font-size:13px;
-    }
-    .mark{
-      width:32px;height:32px;border-radius:10px;
-      background: rgba(11,18,32,.06);
-      border: 1px solid var(--line);
-      display:grid;place-items:center;
-      font-weight:900;
-    }
-    nav{
-      display:flex;
-      gap:18px;
-      align-items:center;
-      color:var(--muted);
-      font-weight:700;
-      font-size:13px;
-    }
-    nav a{
-      color:inherit;
-      text-decoration:none;
-      padding:8px 10px;
-      border-radius:10px;
-    }
-    nav a:hover{
-      background: rgba(11,18,32,.05);
-      color:var(--ink);
+    .card{
+      width:min(920px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:32px;
     }
 
-    /* ====== Hero Card ====== */
-    .hero{
-      position:relative;
-      border-radius:22px;
-      overflow:hidden;
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      background:
-        radial-gradient(900px 520px at 72% 25%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 55%),
-        linear-gradient(135deg, rgba(255,255,255,.65) 0%, rgba(255,255,255,.35) 100%);
-      backdrop-filter: blur(10px);
-    }
-
-    /* inner wave highlight */
-    .hero::before{
-      content:"";
-      position:absolute;
-      inset:-25%;
-      background:
-        radial-gradient(closest-side, rgba(255,255,255,.85), rgba(255,255,255,0) 70%),
-        radial-gradient(closest-side, rgba(11,18,32,.06), rgba(11,18,32,0) 72%);
-      transform: rotate(6deg);
-      opacity:.75;
-      filter: blur(18px);
-      pointer-events:none;
-    }
-
-    .hero-inner{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 22px;
-      padding: clamp(22px, 4vw, 46px);
-      min-height: 520px;
-      align-items:center;
-      position:relative;
-      z-index:1;
-    }
-
-    /* ====== Copy ====== */
-    .kicker{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      color: rgba(11,18,32,.78);
-      font-weight:800;
-      font-size:12px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      padding:8px 12px;
-      border-radius:999px;
-      background: rgba(255,255,255,.62);
-      border: 1px solid rgba(11,18,32,.10);
-    }
     h1{
-      margin:14px 0 12px;
-      font-size: clamp(34px, 4.6vw, 56px);
-      line-height:1.08;
-      letter-spacing:-0.03em;
-    }
-    .desc{
-      margin:0 0 22px;
-      color: var(--muted);
-      font-size: 15px;
-      line-height:1.8;
-      max-width: 560px;
+      margin:0 0 8px;
+      font-size:28px;
+      letter-spacing:-.02em;
     }
 
-    /* ====== CTA ====== */
-    .cta{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      text-decoration:none;
-      font-weight:800;
-      border: 1px solid rgba(0,0,0,.12);
-      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
-      user-select:none;
-    }
-    .btn.primary{
-      background: var(--btn);
-      color: var(--btnText);
-      box-shadow: 0 14px 30px rgba(11,18,32,.18);
-    }
-    .btn.primary:hover{ transform: translateY(-1px); }
-    .btn.secondary{
-      background: rgba(255,255,255,.66);
-      color: var(--ink);
-      border: 1px solid rgba(11,18,32,.12);
-    }
-    .btn.secondary:hover{ transform: translateY(-1px); }
-
-    /* ====== Right Panel ====== */
-    .panel{
-      justify-self:end;
-      width:min(420px, 100%);
-      border-radius: 18px;
-      border: 1px solid rgba(11,18,32,.10);
-      background: rgba(255,255,255,.65);
-      backdrop-filter: blur(10px);
-      padding: 18px;
-    }
-    .panel h3{
-      margin:0 0 10px;
+    .sub{
+      margin:0 0 26px;
+      color:var(--muted);
+      line-height:1.7;
       font-size:14px;
-      letter-spacing:-0.01em;
     }
-    .list{
-      margin:0;
-      padding:0;
-      list-style:none;
+
+    .section{
+      margin-top:26px;
+    }
+
+    .section-title{
+      margin:0 0 14px;
+      font-weight:800;
+      letter-spacing:-.01em;
+    }
+
+    .grid{
       display:grid;
-      gap:10px;
-    }
-    .item{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      padding: 12px 12px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.72);
-      border: 1px solid rgba(11,18,32,.08);
-    }
-    .dot{
-      width:10px;height:10px;border-radius:999px;
-      background: rgba(11,18,32,.65);
-      margin-top: 6px;
-      flex: 0 0 auto;
-    }
-    .item b{ font-size:13px; }
-    .item span{
-      display:block;
-      margin-top:3px;
-      color: var(--muted);
-      font-size:12px;
-      line-height:1.55;
-    }
-
-    /* ====== Footer strip ====== */
-    .strip{
-      display:flex;
       gap:14px;
-      flex-wrap:wrap;
-      padding: 14px 18px;
-      border-top: 1px solid rgba(11,18,32,.08);
-      color: rgba(11,18,32,.65);
-      font-size:12px;
-      font-weight:700;
-      background: rgba(255,255,255,.40);
-      backdrop-filter: blur(10px);
     }
-    .strip a{ color:inherit; text-decoration:none; }
-    .strip a:hover{ color: var(--ink); }
 
-    /* ====== Responsive ====== */
-    @media (max-width: 900px){
-      .hero-inner{ grid-template-columns: 1fr; min-height: unset; }
-      .panel{ justify-self:stretch; }
-      nav{ display:none; } /* 필요하면 살려도 됨 */
+    @media (min-width:760px){
+      .grid.two{grid-template-columns:1fr 1fr;}
+    }
+
+    label{
+      display:block;
+      font-size:13px;
+      color:var(--muted);
+      margin:0 0 8px;
+    }
+
+    .req{
+      color:#ff6b6b;
+      margin-left:6px;
+    }
+
+    input, textarea{
+      width:100%;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(12,19,32,.75);
+      color:var(--text);
+      outline:none;
+      font-size:14px;
+    }
+
+    input::placeholder, textarea::placeholder{
+      color:rgba(231,236,246,.35);
+    }
+
+    input:focus, textarea:focus{
+      border-color: var(--focus);
+      box-shadow: 0 0 0 4px rgba(56,189,248,.12);
+    }
+
+    textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .hint{
+      margin-top:8px;
+      font-size:12px;
+      color:rgba(231,236,246,.45);
+      line-height:1.6;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:30px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      border-radius:12px;
+      padding:12px 18px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .primary{
+      background:var(--btn);
+      color:var(--btnText);
+    }
+
+    .ghost{
+      background:transparent;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .msg{
+      margin-top:14px;
+      font-size:13px;
+      color:var(--muted);
     }
   </style>
 </head>
 
 <body>
-  <div class="bg" aria-hidden="true"></div>
-
   <div class="wrap">
-    <div class="container">
-      <header>
-        <div class="logo">
-          <div class="mark">H</div>
-          <div>HARPER</div>
-        </div>
-        <nav>
-          <a href="#about">About</a>
-          <a href="#focus">Focus</a>
-          <a href="#contact">Contact</a>
-        </nav>
-      </header>
+    <div class="card">
+      <h1>투자 제안</h1>
+      <p class="sub">
+        아래 정보를 남겨주시면 검토 후 연락드리겠습니다.
+        (제출 내용은 내부 검토용으로만 사용됩니다)
+      </p>
 
-      <section class="hero">
-        <div class="hero-inner">
-          <div>
-            <div class="kicker">SYNERGY-CORE STYLE · PREMIUM</div>
-            <h1>자료는 가볍게.<br/>검토는 깊게.</h1>
-            <p class="desc">
-              핵심 정보만 빠르게 모으고, 리스크·업사이드·검증 질문을 구조적으로 정리합니다.
-              미팅에서 바로 쓰는 한 장 요약으로 연결합니다.
-            </p>
+      <!-- ================= FORM ================= -->
+      <form id="leadForm">
+        <div class="section">
+          <div class="section-title">대표자 정보</div>
 
-            <div class="cta">
-              <!-- 버튼 링크는 원하는 곳으로 교체 -->
-              <a class="btn primary" href="#contact">투자 제안하기 →</a>
-              <a class="btn secondary" href="#about">소개서 보기</a>
+          <div class="grid two">
+            <div>
+              <label>성함 <span class="req">*</span></label>
+              <input name="founder_name" placeholder="홍길동" required />
+            </div>
+            <div>
+              <label>이메일 주소 <span class="req">*</span></label>
+              <input name="email" type="email" placeholder="name@company.com" required />
             </div>
           </div>
 
-          <aside class="panel" id="focus">
-            <h3>검토 프레임</h3>
-            <ul class="list">
-              <li class="item">
-                <div class="dot"></div>
-                <div>
-                  <b>Problem → Why now</b>
-                  <span>시장 구조 변화·규제·기술 파편화 등 “왜 지금”을 한 문장으로.</span>
-                </div>
-              </li>
-              <li class="item">
-                <div class="dot"></div>
-                <div>
-                  <b>Moat &amp; Execution</b>
-                  <span>재현 가능한 운영/데이터/채널의 축적이 있는지 확인.</span>
-                </div>
-              </li>
-              <li class="item">
-                <div class="dot"></div>
-                <div>
-                  <b>Risk &amp; Next Proof</b>
-                  <span>다음 라운드 전까지 “증명해야 할 것”을 명확히 정의.</span>
-                </div>
-              </li>
-            </ul>
-          </aside>
+          <div class="grid two" style="margin-top:14px;">
+            <div>
+              <label>휴대폰 번호 <span class="req">*</span></label>
+              <input name="phone" placeholder="010-1234-5678" required />
+            </div>
+            <div>
+              <label>출생 연도 <span class="req">*</span></label>
+              <input name="birth_year" placeholder="1991" required />
+            </div>
+          </div>
+
+          <div class="grid" style="margin-top:14px;">
+            <div>
+              <label>링크드인 / 소개 URL</label>
+              <input name="linkedin" placeholder="https://linkedin.com/in/..." />
+              <div class="hint">
+                노션 페이지, 개인 웹사이트, 소셜 링크도 괜찮습니다.
+              </div>
+            </div>
+          </div>
+
+          <div class="grid" style="margin-top:14px;">
+            <div>
+              <label>학력 <span class="req">*</span></label>
+              <textarea name="education" placeholder="- 서울대학교 MBA&#10;- 경희대학교 경영학과 학사" required></textarea>
+            </div>
+          </div>
+
+          <div class="grid" style="margin-top:14px;">
+            <div>
+              <label>
+                <input type="checkbox" name="agree" value="개인정보의 수집과 이용에 동의합니다." required />
+                개인정보 수집 및 이용에 동의합니다 <span class="req">*</span>
+              </label>
+            </div>
+          </div>
         </div>
 
-        <div class="strip" id="contact">
-          <div>© Harper</div>
-          <!-- 아래 링크는 네 걸로 바꿔 -->
-          <a href="mailto:you@example.com">you@example.com</a>
-          <a href="#" onclick="alert('링크 교체하면 됨'); return false;">LinkedIn</a>
-          <a href="#" onclick="alert('노션/포폴 링크로 교체'); return false;">Portfolio</a>
+        <div class="actions">
+          <button class="primary" type="submit">제출하기</button>
+          <button class="ghost" type="button" onclick="this.form.reset()">초기화</button>
         </div>
-      </section>
+
+        <div class="msg" id="msg"></div>
+      </form>
+      <!-- =============== /FORM =============== -->
     </div>
   </div>
+
+  <!-- ================= SCRIPT ================= -->
+  <script>
+    const FORM_ID = "1FAIpQLSeisIhkpJSZGPBgNfK_OBkLXX7qhdG6wcv8AoEqYoacwJK68A";
+
+    const ENTRY = {
+      founder_name: "entry.1601243387",
+      email:       "entry.1083193062",
+      phone:       "entry.1028457420",
+      birth_year:  "entry.586336371",
+      linkedin:    "entry.1079867991",
+      education:   "entry.1351024540",
+      agree:       "entry.1766634361"
+    };
+
+    const endpoint = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
+    const form = document.getElementById("leadForm");
+    const msg  = document.getElementById("msg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      msg.textContent = "제출 중…";
+
+      const fd = new FormData();
+
+      for (const [name, entryKey] of Object.entries(ENTRY)) {
+        const el = form.elements[name];
+        if (!el) continue;
+
+        let value = "";
+        if (el.type === "checkbox") {
+          value = el.checked ? el.value : "";
+        } else {
+          value = el.value;
+        }
+        fd.append(entryKey, value);
+      }
+
+      try {
+        await fetch(endpoint, {
+          method: "POST",
+          mode: "no-cors",
+          body: fd
+        });
+        msg.textContent = "✔️ 제출 완료! 확인 후 연락드리겠습니다.";
+        form.reset();
+      } catch (err) {
+        msg.textContent = "❌ 제출 실패. 잠시 후 다시 시도해주세요.";
+      }
+    });
+  </script>
+  <!-- =============== /SCRIPT =============== -->
+
 </body>
 </html>
