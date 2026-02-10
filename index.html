@@ -3,193 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investment Pitch | Venture Capital</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <title>AI 심사역 - 스타트업 지원 포털</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --primary: #1a56db; /* 신뢰감 있는 딥 블루 */
-            --primary-hover: #1e429f;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --bg-body: #f9fafb;
-            --bg-card: #ffffff;
-            --border: #e5e7eb;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            padding: 80px 20px;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .container {
-            max-width: 560px;
-            margin: 0 auto;
-            background: var(--bg-card);
-            padding: 48px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            margin-bottom: 12px;
-            letter-spacing: -0.02em;
-        }
-
-        .header p {
-            color: var(--text-muted);
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 8px;
-            color: var(--text-main);
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 15px;
-            color: var(--text-main);
-            background-color: #ffffff;
-            transition: all 0.2s ease;
-            box-sizing: border-box;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(26, 86, 219, 0.1);
-        }
-
-        input::placeholder {
-            color: #d1d5db;
-        }
-
-        textarea {
-            height: 120px;
-            line-height: 1.6;
-            resize: none;
-        }
-
-        button {
-            width: 100%;
-            padding: 16px;
-            background-color: var(--primary);
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.1s ease, background 0.2s ease;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: var(--primary-hover);
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 12px;
-            color: #9ca3af;
-            letter-spacing: 0.02em;
-        }
-
-        /* 개인정보 동의 영역 스타일 */
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .checkbox-group input {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="gradient-bg p-6 text-white shadow-lg">
+        <h1 class="text-2xl font-bold text-center">AI Investment Analyst Portal</h1>
+    </nav>
 
-<div class="container">
-    <div class="header">
-        <h1>Submit Your Pitch</h1>
-        <p>함께 세상을 바꿀 혁신적인 파트너를 기다립니다.<br>검토 후 3일 이내에 개별 연락드리겠습니다.</p>
-    </div>
+    <main class="max-w-4xl mx-auto my-10 p-8 bg-white rounded-xl shadow-md">
+        <section class="mb-8 border-b pb-6">
+            <h2 class="text-xl font-semibold mb-2">🚀 스타트업 지원하기</h2>
+            <p class="text-gray-600">입력하신 데이터는 AI 심사역이 실시간으로 분석하여 투자 검토 리포트를 생성합니다.</p>
+        </section>
 
-    <form action="https://docs.google.com/forms/d/e/1FAIpQLSeisIhkpJSZGPBgNfK_OBkLXX7qhdG6wcv8AoEqYoacwJK68A/formResponse" method="POST">
-        
-        <div class="form-group">
-            <label for="company">Company Name</label>
-            <input type="text" id="company" name="entry.1601243387" placeholder="회사명을 입력하세요" required>
+        <form id="applicationForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">기업명</label>
+                <input type="text" id="companyName" class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="예: 리터놀" required>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">핵심 기술 분야</label>
+                    <select id="techSector" class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm">
+                        <option>온디바이스 AI</option>
+                        <option>SaaS</option>
+                        <option>핀테크</option>
+                        <option>커머스/플랫폼</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">희망 투자 금액 (억 원)</label>
+                    <input type="number" id="fundingAmount" class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm" placeholder="예: 10">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">비즈니스 모델 및 유즈케이스</label>
+                <textarea id="businessModel" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm" placeholder="AI가 분석할 핵심 사업 내용을 입력해주세요."></textarea>
+            </div>
+
+            <button type="button" onclick="analyzeApplication()" class="w-full gradient-bg text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition">
+                AI 심사역에게 검토 요청하기
+            </button>
+        </form>
+
+        <div id="resultArea" class="mt-10 p-6 bg-indigo-50 rounded-lg hidden border border-indigo-200">
+            <h3 class="text-lg font-bold text-indigo-800 mb-4">🤖 AI 실시간 심사평 (Draft)</h3>
+            <div id="aiSummary" class="text-gray-700 whitespace-pre-line"></div>
         </div>
+    </main>
 
-        <div class="form-group">
-            <label for="founder">Founder Name</label>
-            <input type="text" id="founder" name="entry.1083193062" placeholder="대표자 성함을 입력하세요" required>
-        </div>
+    <script>
+        function analyzeApplication() {
+            const name = document.getElementById('companyName').value;
+            const sector = document.getElementById('techSector').value;
+            const bm = document.getElementById('businessModel').value;
 
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="entry.586336371" placeholder="contact@startup.com" required>
-        </div>
+            if(!name) { alert('기업명을 입력해주세요!'); return; }
 
-        <div class="form-group">
-            <label for="pitch">One-line Pitch</label>
-            <input type="text" id="pitch" name="entry.1079867991" placeholder="제품/서비스를 한 줄로 요약해주세요" required>
-        </div>
-
-        <div class="form-group">
-            <label for="deck">Pitch Deck (Link)</label>
-            <input type="url" id="deck" name="entry.1445419258" placeholder="드라이브 또는 노션 링크 (권한 확인 필수)">
-        </div>
-
-        <div class="form-group">
-            <label for="memo">Note</label>
-            <textarea id="memo" name="entry.1869144124" placeholder="추가로 전달하고 싶은 내용을 적어주세요"></textarea>
-        </div>
-
-        <input type="hidden" name="entry.1766634361" value="개인정보의 수집과 이용에 동의합니다.">
-
-        <button type="submit">Submit Proposal</button>
-    </form>
-    
-    <div class="footer">
-        © 2026 Venture Capital Partners. All rights reserved.
-    </div>
-</div>
-
+            // 실제로는 여기서 AI API를 호출합니다. 현재는 데모용 로직입니다.
+            document.getElementById('resultArea').classList.remove('hidden');
+            document.getElementById('aiSummary').innerHTML = `
+                <b>[${name}] 기업 분석 완료</b>
+                1. 섹터 적합성: ${sector} 분야는 최근 투자 트렌드에 부합합니다.
+                2. 분석 의견: 입력하신 BM은 '${bm.substring(0, 20)}...' 내용을 기반으로 하며, 기술적 해자(Moat) 확보가 관건입니다.
+                3. 다음 단계: 구글 문서로 리포트를 자동 생성하여 심사역에게 전달할 예정입니다.
+            `;
+        }
+    </script>
 </body>
 </html>
