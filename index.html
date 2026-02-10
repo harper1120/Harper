@@ -2,137 +2,128 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>AI Analyst Showcase - Project IC</title>
+    <title>AI IC Report - The Great Debate Mode</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; }
+        .debate-bubble { border-left: 4px solid #e2e8f0; padding-left: 1.5rem; margin-bottom: 2rem; position: relative; }
+        .guru-tag { font-size: 0.65rem; font-weight: 900; padding: 2px 8px; rounded: 4px; text-transform: uppercase; margin-bottom: 8px; display: inline-block; }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-[#0f172a]">
+<body class="py-12 px-6">
 
-    <nav class="bg-white border-b border-slate-200 px-8 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div class="flex items-center gap-4">
-            <span class="bg-indigo-600 text-white font-black px-3 py-1 rounded text-sm">PRO</span>
-            <h1 class="font-black text-xl tracking-tight">VC_REVIEW <span class="text-indigo-600">.AI</span></h1>
-        </div>
-        <div class="flex items-center gap-6 text-sm font-bold text-slate-500">
-            <button class="hover:text-indigo-600">REPORTS</button>
-            <button class="hover:text-indigo-600">CRITERIA</button>
-            <button class="bg-slate-900 text-white px-5 py-2 rounded-full text-xs">JONGHYUK'S LAB</button>
-        </div>
-    </nav>
-
-    <main class="max-w-6xl mx-auto py-12 px-6">
-        <header class="mb-16 text-center">
-            <h2 class="text-5xl font-black mb-6 tracking-tighter">AI Investment Review Showcase</h2>
-            <p class="text-slate-500 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">IR 자료를 업로드하면 20인의 가상 VC가 기술력, 시장성, 팀 역량을 심층 분석하여 Showcase 리포트를 생성합니다.</p>
-            
-            <div class="flex justify-center gap-4">
-                <input type="file" id="ir-upload" class="hidden" onchange="enableAnalysis()">
-                <button onclick="document.getElementById('ir-upload').click()" class="border-2 border-slate-200 px-8 py-3 rounded-xl font-bold hover:bg-white transition">Upload IR Deck</button>
-                <button id="start-btn" onclick="runAnalysis()" class="bg-indigo-600 text-white px-10 py-3 rounded-xl font-bold opacity-30 cursor-not-allowed shadow-lg shadow-indigo-200 transition" disabled>Run IC Analysis</button>
+    <div class="max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-12 bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200">
+            <div class="flex gap-4">
+                <input type="file" id="ir-file" class="hidden" onchange="ready()">
+                <button onclick="document.getElementById('ir-file').click()" class="bg-slate-100 px-6 py-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition">1. IR Deck Load</button>
+                <button id="run-btn" onclick="runShowcase()" class="bg-indigo-600 text-white px-10 py-3 rounded-xl font-bold text-sm opacity-30 cursor-not-allowed" disabled>2. Start 20-VC Debate</button>
             </div>
-        </header>
+            <div class="text-[10px] font-black text-slate-400 tracking-widest italic text-right">
+                JONGHYUK ANALYST LAB<br>VIRTUAL IC PROTOCOL V4.5
+            </div>
+        </div>
 
-        <div id="showcase-content" class="hidden animate-in fade-in duration-700">
+        <div id="output" class="hidden space-y-12">
             
-            <div class="bg-white border border-slate-200 rounded-[2.5rem] p-10 mb-8 flex justify-between items-center">
+            <section class="bg-white border-4 border-slate-900 rounded-[3rem] p-12 flex justify-between items-center shadow-2xl">
                 <div>
-                    <span class="text-indigo-600 font-black text-xs uppercase tracking-widest mb-2 block">Investment Thesis</span>
-                    <h3 id="target-name" class="text-4xl font-black tracking-tight mb-2">Analyzing Target...</h3>
-                    <p class="text-slate-500 font-medium">온디바이스 AI 시장 내 리터놀 모델 기반의 혁신적 엣지 컴퓨팅</p>
+                    <span class="text-indigo-600 font-black text-xs tracking-widest uppercase mb-3 block underline decoration-4 underline-offset-8">Final Investment Thesis</span>
+                    <h2 id="target-name" class="text-6xl font-black tracking-tighter text-slate-900 mb-4 italic">Target</h2>
+                    <p class="text-slate-500 font-bold text-lg italic">"리터놀의 효율성과 캐시모의 확장성을 모두 갖춘 온디바이스 AI의 게임 체인저"</p>
                 </div>
                 <div class="text-right">
-                    <div class="text-6xl font-black text-slate-900 leading-none mb-2">87.5</div>
-                    <div class="flex gap-1 justify-end">
-                        <i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star-half-alt text-yellow-400"></i>
-                    </div>
+                    <div class="text-8xl font-black text-slate-900 tracking-tighter">88.5</div>
+                    <p class="text-xs font-black text-green-500 mt-2">16 APPROVE / 4 PASS</p>
                 </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <div class="bg-white border border-slate-100 p-8 rounded-[2rem] shadow-sm">
-                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 text-xl">
-                        <i class="fas fa-globe"></i>
-                    </div>
-                    <h4 class="font-black text-xl mb-4">Market Potential</h4>
-                    <p class="text-slate-500 text-sm leading-relaxed font-medium">글로벌 온디바이스 AI 시장은 연평균 25% 성장 중이며, 엣지 단에서의 실시간 추론 수요가 급증하고 있습니다.</p>
-                </div>
-                <div class="bg-white border border-slate-100 p-8 rounded-[2rem] shadow-sm">
-                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-6 text-xl">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h4 class="font-black text-xl mb-4">Tech Edge</h4>
-                    <p class="text-slate-500 text-sm leading-relaxed font-medium">리터놀 스타일의 저전력 최적화 알고리즘을 통해 기존 클라우드 대비 비용 70% 절감 및 보안성을 확보했습니다.</p>
-                </div>
-                <div class="bg-white border border-slate-100 p-8 rounded-[2rem] shadow-sm">
-                    <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-6 text-xl">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <h4 class="font-black text-xl mb-4">Risk Analysis</h4>
-                    <p class="text-slate-500 text-sm leading-relaxed font-medium">B2B 엔터프라이즈 시장 침투 시 커스터마이징 인력 소요가 클 수 있으며, 하드웨어 파트너십 독점성 유지가 관건입니다.</p>
-                </div>
-            </div>
-
-            <section class="bg-slate-900 rounded-[3rem] p-12 text-white mb-12 overflow-hidden relative">
-                <div class="relative z-10">
-                    <h4 class="text-3xl font-black mb-8 italic tracking-tighter">20-Panel VC Verdict</h4>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-12">
-                        <div class="border-l-2 border-indigo-500 pl-6">
-                            <div class="text-4xl font-black mb-1">16 : 4</div>
-                            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Approve Ratio</div>
-                        </div>
-                        <div class="border-l-2 border-green-500 pl-6">
-                            <div class="text-4xl font-black mb-1">92%</div>
-                            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Growth Score</div>
-                        </div>
-                        <div class="border-l-2 border-yellow-500 pl-6">
-                            <div class="text-4xl font-black mb-1">High</div>
-                            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Conviction Level</div>
-                        </div>
-                        <div class="border-l-2 border-blue-500 pl-6">
-                            <div class="text-4xl font-black mb-1">Series A</div>
-                            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Optimal Stage</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-600 rounded-full blur-[120px] opacity-20"></div>
             </section>
 
-            <div class="text-center">
-                <button onclick="alert('Google Docs Report is being generated...')" class="bg-indigo-600 text-white font-black px-12 py-5 rounded-2xl text-lg hover:bg-indigo-700 shadow-2xl shadow-indigo-200 transition">
-                    Download Full 20-Page Review Report
-                </button>
+            <section class="bg-slate-900 rounded-[3.5rem] p-12 text-white shadow-2xl relative overflow-hidden">
+                <h3 class="text-3xl font-black mb-12 italic border-b border-slate-800 pb-6 flex justify-between items-center">
+                    <span>The Great IC Debate: 5 Rounds</span>
+                    <span class="text-xs font-mono text-slate-500">Live Transcript</span>
+                </h3>
+
+                <div id="debate-flow" class="space-y-8 relative z-10">
+                    </div>
+                
+                <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-600 rounded-full blur-[150px] opacity-20"></div>
+            </section>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-10 rounded-[2.5rem] border border-slate-200">
+                    <h4 class="font-black text-xl mb-8 tracking-tight italic">Founder's 15 Critical Q&A</h4>
+                    <ul id="qa-list" class="space-y-4 text-sm font-bold text-slate-600 italic">
+                        </ul>
+                </div>
+                <div class="bg-indigo-600 p-10 rounded-[2.5rem] text-white shadow-xl shadow-indigo-100">
+                    <h4 class="font-black text-xl mb-8 tracking-tight italic">Immediate Action Plan</h4>
+                    <ul id="action-list" class="space-y-4 text-sm font-bold text-indigo-100">
+                        </ul>
+                </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <script>
-        function enableAnalysis() {
-            const btn = document.getElementById('start-btn');
-            const file = document.getElementById('ir-upload').files[0];
-            if(file) {
+        function ready() {
+            const btn = document.getElementById('run-btn');
+            if(document.getElementById('ir-file').files[0]) {
                 btn.disabled = false;
                 btn.classList.remove('opacity-30', 'cursor-not-allowed');
-                alert(`신규 분석 대상을 발견했습니다: ${file.name}`);
             }
         }
 
-        function runAnalysis() {
-            const btn = document.getElementById('start-btn');
-            const name = document.getElementById('ir-upload').files[0].name.split('.')[0];
-            btn.innerText = "Processing 20 VC Perspectives...";
+        async function runShowcase() {
+            const fileName = document.getElementById('ir-file').files[0].name.split('.')[0];
+            const btn = document.getElementById('run-btn');
+            const output = document.getElementById('output');
+            const flow = document.getElementById('debate-flow');
+            
+            btn.innerText = "IC in Progress...";
             btn.disabled = true;
+            output.classList.remove('hidden');
+            document.getElementById('target-name').innerText = fileName;
+            flow.innerHTML = "";
 
-            setTimeout(() => {
-                document.getElementById('showcase-content').classList.remove('hidden');
-                document.getElementById('target-name').innerText = name;
-                btn.innerText = "Showcase Ready";
-                window.scrollTo({ top: document.querySelector('#showcase-content').offsetTop - 100, behavior: 'smooth' });
-            }, 3000);
+            const debateData = [
+                { role: "The Bull", color: "bg-green-500", text: "이 기업의 온디바이스 최적화는 리터놀이 초기에 보여줬던 에너지 효율을 압도합니다. 이건 단순 솔루션이 아니라 인프라입니다!" },
+                { role: "The Bear", color: "bg-red-500", text: "잠깐! 기술은 좋지만 캐시모처럼 명확한 수익 모델(Revenue Stream)이 데이터로 검증되지 않았어요. 아직은 가설일 뿐입니다." },
+                { role: "Guru_Peter", color: "bg-blue-500", text: "성장률 지표를 보세요. 작년 대비 300% 성장은 시장의 굶주림을 증명합니다. 숫자가 모든 걸 말해주고 있어요." },
+                { role: "Guru_Warren", color: "bg-orange-500", text: "해자가 충분한가? 독점적인 칩셋 파트너십이 유지된다면, 경쟁자가 침범하기 어려운 아주 깊은 경제적 해자를 갖게 될 겁니다." },
+                { role: "Wild Card", color: "bg-purple-500", text: "만약 이들이 B2B가 아니라 직접 B2C 마케팅 칩셋 시장에 진출한다면? 게임의 법칙이 바뀔 수 있는 딜입니다." }
+            ];
+
+            for (const item of debateData) {
+                const div = document.createElement('div');
+                div.className = "debate-bubble animate-in slide-in-from-left duration-700";
+                div.innerHTML = `
+                    <span class="guru-tag ${item.color}">${item.role}</span>
+                    <p class="text-lg font-bold leading-relaxed italic text-slate-100">"${item.text}"</p>
+                `;
+                flow.appendChild(div);
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                await new Promise(r => setTimeout(r, 1500)); // 치열한 토론 시간 연출
+            }
+
+            populateFinals();
+        }
+
+        function populateFinals() {
+            const qas = [
+                "1. 리터놀 모델링 대비 엣지 추론 속도가 환경별로 어떻게 차이 나는가?",
+                "2. 캐시모의 마케팅 툴과 결합 시 예상되는 데이터 전송 효율 수치는?",
+                "3. 창업팀의 핵심 인력이 독자적으로 기술 특허를 방어할 수 있는가?"
+            ];
+            const actions = [
+                "Round 1. 기술 실사(Tech DD) 및 특허 침해 여부 교차 검증",
+                "Round 2. 주요 하드웨어 제조사 레퍼런스 체크 및 파트너십 심화",
+                "Round 3. 다음 주 파트너 투심위 상정 및 최종 텀시트(Term Sheet) 조율"
+            ];
+            document.getElementById('qa-list').innerHTML = qas.map(q => `<li class="border-b border-slate-100 pb-2">${q}</li>`).join('');
+            document.getElementById('action-list').innerHTML = actions.map(a => `<li class="flex items-center"><i class="fas fa-arrow-right mr-3"></i> ${a}</li>`).join('');
         }
     </script>
 </body>
