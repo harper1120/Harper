@@ -2,94 +2,73 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>AI VC Showcase - Error Fixed</title>
+    <title>AI VC Showcase - Final Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-slate-50 p-8 md:p-12">
-    <div class="max-w-4xl mx-auto bg-white p-10 rounded-[2.5rem] shadow-xl border border-slate-200">
-        <header class="mb-8 border-b pb-6">
-            <h1 class="text-3xl font-black italic tracking-tighter">VC_REVIEW <span class="text-indigo-600">STABLE</span></h1>
-            <p class="text-slate-400 text-xs font-bold uppercase mt-1 italic">Gemini 1.5 Flash Optimization</p>
-        </header>
-
-        <div class="space-y-6">
-            <input type="password" id="api-key" placeholder="AI Studio에서 받은 API Key 입력" class="w-full border-2 border-slate-100 p-4 rounded-2xl text-sm focus:border-indigo-500 outline-none transition">
-            
-            <div class="flex gap-4">
-                <input type="file" id="pdf-input" accept=".pdf" class="flex-1 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200">
-                <button onclick="runStableIC()" id="btn" class="bg-indigo-600 text-white px-10 py-3 rounded-2xl font-black shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">심사 시작</button>
-            </div>
+<body class="bg-slate-50 p-10">
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-lg border">
+        <h1 class="text-2xl font-black mb-6 italic">VC_REVIEW <span class="text-indigo-600">STABLE v2</span></h1>
+        <div class="space-y-4">
+            <input type="password" id="api-key" placeholder="Gemini API Key 입력" class="w-full border p-3 rounded-xl shadow-inner outline-none focus:border-indigo-500">
+            <input type="file" id="pdf-input" accept=".pdf" class="w-full text-sm">
+            <button onclick="runIC()" id="btn" class="w-full bg-indigo-600 text-white font-black py-4 rounded-xl hover:bg-indigo-700 transition">20인 투심위 가동</button>
         </div>
-
-        <div id="status" class="mt-8 font-mono text-xs text-slate-500 p-4 bg-slate-50 rounded-xl hidden"></div>
-
-        <div id="result-view" class="mt-10 hidden border-t-2 border-indigo-100 pt-10">
-            <h2 class="text-2xl font-black text-slate-800 mb-6 italic italic">20-Panel VC IC Report</h2>
-            <div id="output" class="prose prose-slate max-w-none text-sm leading-relaxed text-slate-600 whitespace-pre-wrap font-medium"></div>
-        </div>
+        <div id="status" class="mt-6 font-mono text-xs text-slate-500 whitespace-pre-wrap bg-slate-50 p-4 rounded-xl hidden"></div>
     </div>
 
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
-        async function runStableIC() {
+        async function runIC() {
             const key = document.getElementById('api-key').value;
             const file = document.getElementById('pdf-input').files[0];
             const status = document.getElementById('status');
             const btn = document.getElementById('btn');
 
-            if(!key || !file) return alert("API Key와 PDF 파일을 모두 확인해주세요!");
+            if(!key || !file) return alert("Key와 파일을 확인하세요!");
 
-            btn.disabled = true;
-            btn.innerText = "분석 중...";
             status.classList.remove('hidden');
-            status.innerText = "> PDF 텍스트 추출 중...";
+            status.innerText = "> 분석 엔진 가동 중...";
+            btn.disabled = true;
 
-            try {
-                // 1. PDF 텍스트 추출
-                const reader = new FileReader();
-                reader.onload = async function() {
+            const reader = new FileReader();
+            reader.onload = async function() {
+                try {
                     const typedarray = new Uint8Array(this.result);
                     const pdf = await pdfjsLib.getDocument(typedarray).promise;
                     let text = "";
-                    for(let i=1; i<=Math.min(pdf.numPages, 20); i++) { // 최대 20페이지까지만
+                    for(let i=1; i<=Math.min(pdf.numPages, 10); i++) {
                         const page = await pdf.getPage(i);
                         const content = await page.getTextContent();
                         text += content.items.map(s => s.str).join(' ');
                     }
+
+                    status.innerText += "\n> 20인 VC 패널에게 데이터를 전송합니다...";
+
+                    // 수정된 API 호출 경로
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
                     
-                    status.innerText = "> 20인 VC 패널 소환 중 (Gemini Flash)...";
-                    
-                    // 2. API 호출
-                    const prompt = `너는 15명의 VC Guru와 5명의 Bright Minds 투자심의위원회다. 4단계 프로세스로 다음 IR을 비판적으로 분석해줘: ${text.substring(0, 15000)}`;
-                    
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                    const res = await fetch(apiUrl, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: `너는 20인 투자심의위원회다. 다음 IR을 4단계로 분석해: ${text.substring(0, 10000)}` }] }]
+                        })
                     });
 
                     const data = await res.json();
-                    
                     if(data.error) {
-                        status.innerHTML = `<span class="text-red-500">> API 에러: ${data.error.message} (Code: ${data.error.code})</span>`;
-                        console.error(data.error);
+                        status.innerText += `\n> 에러 발생: ${data.error.message}`;
                     } else {
-                        document.getElementById('result-view').classList.remove('hidden');
-                        document.getElementById('output').innerText = data.candidates[0].content.parts[0].text;
-                        status.innerText = "> 분석이 완료되었습니다.";
+                        status.innerText += "\n\n[분석 결과]\n" + data.candidates[0].content.parts[0].text;
                     }
-                    btn.disabled = false;
-                    btn.innerText = "심사 시작";
-                };
-                reader.readAsArrayBuffer(file);
-            } catch (e) {
-                status.innerText = "> 예상치 못한 오류 발생. 콘솔(F12)을 확인하세요.";
-                console.error(e);
+                } catch (e) {
+                    status.innerText += `\n> 중단됨: ${e.message}`;
+                }
                 btn.disabled = false;
-            }
+            };
+            reader.readAsArrayBuffer(file);
         }
     </script>
 </body>
