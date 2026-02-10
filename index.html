@@ -2,34 +2,70 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>AI IC Showcase - Real API Mode</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI VC Showcase - Final Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; }
+        .report-section { background: white; border-radius: 2rem; padding: 2.5rem; border: 1px solid #e2e8f0; margin-bottom: 1.5rem; }
+        .debate-log { background: #0f172a; color: #94a3b8; font-family: monospace; padding: 2rem; border-radius: 1.5rem; height: 300px; overflow-y: auto; line-height: 1.6; }
+        .guru-msg { margin-bottom: 1rem; border-left: 2px solid #334155; padding-left: 1rem; }
+    </style>
 </head>
-<body class="bg-slate-50 p-10">
+<body class="p-6 md:p-12">
+
     <div class="max-w-5xl mx-auto">
-        <header class="mb-10 p-8 bg-white rounded-3xl shadow-sm border flex justify-between items-center">
-            <div>
-                <h1 class="text-3xl font-black italic">VC_REVIEW <span class="text-indigo-600">LIVE</span></h1>
-                <p class="text-slate-400 text-xs mt-1 uppercase font-bold">Powered by Gemini 1.5 Pro Engine</p>
+        <header class="mb-10 bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div>
+                    <h1 class="text-3xl font-black italic tracking-tighter text-slate-900">VC_REVIEW <span class="text-indigo-600">PRO</span></h1>
+                    <p class="text-slate-400 text-xs font-bold uppercase mt-1">20-Panel Virtual IC System v4.5</p>
+                </div>
+                <div class="flex flex-col gap-3 w-full md:w-auto">
+                    <input type="password" id="api-key-input" placeholder="Gemini API Key를 입력하세요" class="border px-4 py-2 rounded-xl text-sm w-full md:w-80 shadow-inner">
+                    <div class="flex gap-2">
+                        <input type="file" id="pdf-file" accept=".pdf" class="hidden" onchange="fileSelected()">
+                        <button onclick="document.getElementById('pdf-file').click()" class="bg-slate-100 px-6 py-2.5 rounded-xl font-bold text-xs flex-1 hover:bg-slate-200 transition">PDF 선택</button>
+                        <button id="run-btn" onclick="startAnalysis()" class="bg-indigo-600 text-white px-8 py-2.5 rounded-xl font-bold text-xs flex-1 opacity-30 cursor-not-allowed transition shadow-lg shadow-indigo-200" disabled>분석 실행</button>
+                    </div>
+                </div>
             </div>
-            <input type="password" id="api-key" placeholder="Gemini API Key 입력" class="border p-2 rounded-lg text-sm w-64">
         </header>
 
-        <section class="bg-indigo-600 p-10 rounded-[2.5rem] text-white shadow-xl mb-10">
-            <h2 class="text-xl font-bold mb-4">1. IR 자료 업로드 및 분석</h2>
-            <div class="flex gap-4">
-                <input type="file" id="pdf-upload" accept=".pdf" class="bg-white/10 p-3 rounded-xl flex-1 text-sm">
-                <button onclick="processAndRun()" id="run-btn" class="bg-white text-indigo-600 px-10 py-3 rounded-xl font-black hover:bg-indigo-50 transition">분석 시작</button>
+        <div id="log-container" class="hidden mb-10">
+            <h3 class="text-sm font-black text-slate-500 mb-3 uppercase tracking-widest"><i class="fas fa-microchip mr-2"></i> Real-time IC Thinking Process</h3>
+            <div id="status-log" class="debate-log text-sm">
+                > 시스템 대기 중...
             </div>
-        </section>
+        </div>
 
-        <div id="result-display" class="hidden animate-in fade-in duration-1000">
-            <div class="bg-white p-12 rounded-[3rem] shadow-2xl border border-slate-200">
-                <h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest mb-6 underline decoration-4 underline-offset-8">20-Panel VC Final Report</h3>
-                <div id="ai-response" class="prose prose-slate max-w-none font-medium leading-relaxed text-slate-700">
-                    </div>
+        <div id="result-view" class="hidden animate-in fade-in duration-1000">
+            <div class="report-section flex flex-col md:flex-row justify-between items-center bg-slate-900 text-white border-none shadow-2xl">
+                <div>
+                    <span class="text-indigo-400 font-black text-[10px] tracking-[0.2em] uppercase mb-2 block">Investment Thesis</span>
+                    <h2 id="corp-name" class="text-5xl font-black tracking-tighter italic mb-4">Target Name</h2>
+                    <p class="text-slate-400 font-medium max-w-xl italic text-sm leading-relaxed">"본 검토 대상은 20인 투심위의 프레임워크를 통해 기술적 해자와 시장 확장성이 정밀 검증되었습니다."</p>
+                </div>
+                <div class="text-center md:text-right border-t md:border-t-0 md:border-l border-slate-800 pt-6 md:pt-0 md:pl-10 mt-6 md:mt-0 w-full md:w-auto">
+                    <div class="text-7xl font-black text-white tracking-tighter">IC PASS</div>
+                    <p class="text-indigo-400 font-bold text-xs mt-2 uppercase">Verified by AI Agent</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="report-section">
+                    <h4 class="font-black text-lg mb-6 flex items-center"><i class="fas fa-balance-scale mr-3 text-indigo-500"></i> IC Verdict & Analysis</h4>
+                    <div id="analysis-text" class="text-sm leading-relaxed text-slate-600 whitespace-pre-wrap font-medium">
+                        </div>
+                </div>
+                <div class="report-section bg-indigo-50 border-indigo-100">
+                    <h4 class="font-black text-lg mb-6 flex items-center text-indigo-900"><i class="fas fa-list-check mr-3 text-indigo-600"></i> Founder's 15 Q&A & Plan</h4>
+                    <div id="qa-text" class="text-sm leading-relaxed text-indigo-800 whitespace-pre-wrap italic">
+                        </div>
+                </div>
             </div>
         </div>
     </div>
@@ -37,17 +73,25 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
-        async function processAndRun() {
-            const apiKey = document.getElementById('api-key').value;
-            const fileInput = document.getElementById('pdf-upload');
-            const runBtn = document.getElementById('run-btn');
+        function fileSelected() {
+            const btn = document.getElementById('run-btn');
+            if(document.getElementById('pdf-file').files[0]) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-30', 'cursor-not-allowed');
+            }
+        }
+
+        async function startAnalysis() {
+            const apiKey = document.getElementById('api-key-input').value;
+            const file = document.getElementById('pdf-file').files[0];
+            const log = document.getElementById('status-log');
+            const logContainer = document.getElementById('log-container');
             
-            if(!apiKey) return alert("API Key를 입력해주세요!");
-            if(!fileInput.files[0]) return alert("PDF 파일을 선택해주세요!");
+            if(!apiKey) return alert("Gemini API Key를 입력해주세요!");
 
-            runBtn.innerText = "20인 VC 소환 중...";
-            runBtn.disabled = true;
-
+            logContainer.classList.remove('hidden');
+            log.innerHTML = "> PDF 텍스트를 추출하는 중입니다...<br>";
+            
             // 1. PDF 텍스트 추출
             const reader = new FileReader();
             reader.onload = async function() {
@@ -59,44 +103,55 @@
                     const textContent = await page.getTextContent();
                     fullText += textContent.items.map(s => s.str).join(' ');
                 }
-                
-                // 2. Gemini API 호출 (종혁님의 20인 투심위 프롬프트 장착)
-                callGemini(apiKey, fullText);
+                log.innerHTML += `> 데이터 추출 완료 (${fullText.length} 자). 20인 투심위를 소환합니다...<br>`;
+                executeVC(apiKey, fullText, file.name.split('.')[0]);
             };
-            reader.readAsArrayBuffer(fileInput.files[0]);
+            reader.readAsArrayBuffer(file);
         }
 
-        async function callGemini(key, text) {
-            const display = document.getElementById('result-display');
-            const responseDiv = document.getElementById('ai-response');
-            display.classList.remove('hidden');
-            responseDiv.innerHTML = "20명의 VC가 토론을 시작했습니다. 잠시만 기다려주세요...";
-
+        async function executeVC(key, text, name) {
+            const log = document.getElementById('status-log');
+            const resultView = document.getElementById('result-view');
+            
+            // 종혁님의 20인 투심위 프롬프트 최적화
             const prompt = `
             너는 15명의 VC Guru와 5명의 Bright Minds로 구성된 투자심의위원회다.
-            제공된 IR 자료를 읽고 다음 4단계 프로세스를 아주 디테일하게 수행해.
-            1. 데이터 추출 (시장, 기술, 팀)
-            2. 15인의 개별 투표 결과 (이름 언급하며 논거 제시)
-            3. 패널 3인의 끝장 토론 과정 (The Bull vs The Bear)
-            4. 창업자 질문 15개와 액션 플랜
+            다음 IR 자료를 읽고 '20인 가상 투심위 프롬프트'에 따라 아주 상세히 분석해.
+            
+            [필수 포함 내용]
+            1. 15인의 VC 전문가별 개별 코멘트와 찬반 논거 (버핏, 피터린치, 손정의 등 포함)
+            2. 패널 3인의 끝장 토론 요약 (The Bull vs The Bear)
+            3. 창업자에게 던질 날카로운 15개 질문
+            4. 심사역(종혁)을 위한 4단계 액션 플랜
 
-            분석할 IR 내용: ${text.substring(0, 10000)} // 토큰 제한 고려
+            분석할 IR 내용: ${text.substring(0, 15000)}
             `;
 
             try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${key}`, {
+                // Flash 모델 사용하여 한도 초과 방지
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
                 });
-                const data = await res.json();
-                const resultText = data.candidates[0].content.parts[0].text;
                 
-                // 마크다운 형식으로 변환하여 출력 (간단히)
-                responseDiv.innerHTML = resultText.replace(/\n/g, "<br>");
-                document.getElementById('run-btn').innerText = "분석 완료";
+                const data = await res.json();
+                if(data.error) throw new Error(data.error.message);
+
+                const finalOutput = data.candidates[0].content.parts[0].text;
+                
+                // 결과 노출
+                document.getElementById('corp-name').innerText = name;
+                document.getElementById('analysis-text').innerText = finalOutput.split('3.')[0]; // 적절히 분할
+                document.getElementById('qa-text').innerText = "3." + finalOutput.split('3.')[1]; 
+                
+                log.innerHTML += "> 분석이 성공적으로 완료되었습니다. 대시보드를 생성합니다.<br>";
+                resultView.classList.remove('hidden');
+                window.scrollTo({ top: resultView.offsetTop - 50, behavior: 'smooth' });
+
             } catch (e) {
-                responseDiv.innerHTML = "에러 발생: API 키가 잘못되었거나 한도를 초과했습니다.";
+                log.innerHTML += `<br><span class="text-red-500">> 에러 발생: ${e.message}</span>`;
+                alert("에러가 발생했습니다. API 키나 파일 내용을 확인해주세요.");
             }
         }
     </script>
