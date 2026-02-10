@@ -8,27 +8,84 @@
 </head>
 <body class="bg-slate-50 flex font-sans">
 
-    <aside class="w-72 bg-slate-900 h-screen text-white sticky top-0 p-6">
-        <h1 class="text-2xl font-bold mb-8 italic text-indigo-400">VC IC Agent v2.5</h1>
+    <aside class="w-72 bg-slate-900 h-screen text-white p-6 sticky top-0">
+        <h1 class="text-2xl font-bold mb-8 italic text-indigo-400">VC IC Agent v3.0</h1>
         <nav class="space-y-4">
-            <button class="w-full text-left p-3 bg-slate-800 rounded-lg shadow-inner"><i class="fas fa-file-upload mr-3"></i> IR 자료 분석 모드</button>
-            <button class="w-full text-left p-3 hover:bg-slate-800 transition"><i class="fas fa-history mr-3"></i> 과거 IC 히스토리</button>
-            <button class="w-full text-left p-3 hover:bg-slate-800 transition"><i class="fas fa-file-export mr-3"></i> 구글 문서 연동 설정</button>
+            <button class="w-full text-left p-3 bg-slate-800 rounded-lg"><i class="fas fa-file-upload mr-3"></i> IR 분석 대시보드</button>
+            <button class="w-full text-left p-3 hover:bg-slate-800 transition"><i class="fas fa-history mr-3"></i> 과거 히스토리</button>
         </nav>
     </aside>
 
     <main class="flex-1 p-10 overflow-y-auto">
-        <header class="flex justify-between items-center mb-10 border-b pb-5">
-            <h2 class="text-3xl font-extrabold text-slate-800">IR Analysis & Virtual IC</h2>
-            <div class="flex items-center gap-3">
-                <span class="bg-indigo-100 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-bold shadow-sm">Jonghyuk Analyst (5yr)</span>
-            </div>
+        <header class="mb-10 border-b pb-5 flex justify-between items-center">
+            <h2 class="text-3xl font-extrabold text-slate-800">Virtual IC Portal</h2>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-bold">Jonghyuk Analyst (5yr)</span>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                <h3 class="text-xl font-bold mb-6 flex items-center"><i class="fas fa-cloud-upload-alt mr-2 text-indigo-600"></i> 검토 대상 IR 업로드</h3>
+                <h3 class="text-xl font-bold mb-6 italic text-slate-700">STEP 1: IR 자료 업로드</h3>
                 
-                <div class="border-2 border-dashed border-slate-300 rounded-xl p-10 text-center hover:border-indigo-400 transition cursor-pointer mb-6" id="drop-area">
-                    <i class="fas fa-file-pdf text-4xl text-slate-400 mb-4"></i>
-                    <p class="text-slate
+                <div class="bg-indigo-50 border-2 border-dashed border-indigo-200 rounded-xl p-8 text-center mb-6">
+                    <i class="fas fa-file-pdf text-4xl text-indigo-300 mb-4"></i>
+                    <p class="mb-4 text-slate-600">분석할 IR 파일(PDF, DOCX)을 선택해주세요.</p>
+                    
+                    <input type="file" id="ir-file-input" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+                </div>
+
+                <div id="file-status" class="hidden p-3 bg-green-50 text-green-700 rounded-lg mb-4 text-sm font-medium">
+                    ✅ 파일이 성공적으로 감지되었습니다.
+                </div>
+
+                <button id="run-ic-btn" onclick="executeIC()" class="w-full bg-slate-800 text-white font-bold py-4 rounded-xl opacity-50 cursor-not-allowed transition" disabled>
+                    20인 가상 투심위(IC) 개최하기
+                </button>
+            </div>
+
+            <div class="bg-slate-900 p-8 rounded-2xl shadow-xl text-green-400 font-mono text-sm h-[400px] overflow-y-auto" id="ic-log-screen">
+                <p class="text-slate-500">// AI 심사역 시스템 준비 완료...</p>
+                <p class="text-slate-500">// IR 파일을 선택하면 분석 프로세스가 활성화됩니다.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const fileInput = document.getElementById('ir-file-input');
+        const icBtn = document.getElementById('run-ic-btn');
+        const logScreen = document.getElementById('ic-log-screen');
+        const statusBox = document.getElementById('file-status');
+
+        // 파일이 선택되면 버튼을 활성화하는 기능
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                statusBox.classList.remove('hidden');
+                icBtn.disabled = false;
+                icBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                icBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+                logScreen.innerHTML += `<br><span class="text-yellow-400">> [DETECTED] 신규 분석 대상: ${this.files[0].name}</span>`;
+            }
+        });
+
+        // 20인 투심위 시뮬레이션 로직
+        function executeIC() {
+            logScreen.innerHTML = `<span class="text-indigo-400">> [STAGE 1] IR 데이터 파싱 및 가상 패널 20인 소환 중...</span>`;
+            icBtn.innerText = "투심위 진행 중 (70%)...";
+            icBtn.disabled = true;
+
+            setTimeout(() => {
+                logScreen.innerHTML += `<br>> 15인 전문가 그룹(The Bull, The Bear 등) 판정 시작...<br>> YES (12), NO (3) - 투심 통과 기준 충족.`;
+            }, 2000);
+
+            setTimeout(() => {
+                logScreen.innerHTML += `<br><span class="text-blue-400">> [STAGE 2] 3인 핵심 패널 5라운드 집중 토론...</span><br>> 주제: 온디바이스 AI 시장의 실제 기술 장벽 검증.`;
+            }, 4000);
+
+            setTimeout(() => {
+                logScreen.innerHTML += `<br><span class="text-green-400">> [STAGE 3] 최종 투자심의 보고서 생성 완료.</span><br>> 구글 문서 자동 작성을 완료했습니다.`;
+                icBtn.innerText = "분석 완료";
+                alert('투심위 분석이 끝났습니다! 결과를 확인하세요.');
+            }, 6000);
+        }
+    </script>
+</body>
+</html>
