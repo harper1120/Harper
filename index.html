@@ -3,77 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 심사역 - 스타트업 지원 포털</title>
+    <title>AI 심사역 대시보드</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <nav class="gradient-bg p-6 text-white shadow-lg">
-        <h1 class="text-2xl font-bold text-center">AI Investment Analyst Portal</h1>
-    </nav>
+<body class="bg-gray-100 flex">
 
-    <main class="max-w-4xl mx-auto my-10 p-8 bg-white rounded-xl shadow-md">
-        <section class="mb-8 border-b pb-6">
-            <h2 class="text-xl font-semibold mb-2">🚀 스타트업 지원하기</h2>
-            <p class="text-gray-600">입력하신 데이터는 AI 심사역이 실시간으로 분석하여 투자 검토 리포트를 생성합니다.</p>
+    <aside class="w-64 bg-slate-900 h-screen text-white sticky top-0">
+        <div class="p-6 border-b border-slate-700">
+            <h1 class="text-xl font-bold italic">AI Analyst v1.0</h1>
+        </div>
+        <nav class="p-4 space-y-2">
+            <button onclick="showPage('apply')" class="w-full flex items-center p-3 hover:bg-slate-800 rounded-lg transition">
+                <i class="fas fa-file-signature mr-3"></i> 기업 지원하기
+            </button>
+            <button onclick="showPage('news')" class="w-full flex items-center p-3 hover:bg-slate-800 rounded-lg transition">
+                <i class="fas fa-newspaper mr-3"></i> 시장/뉴스 모니터링
+            </button>
+            <button onclick="showPage('portfolio')" class="w-full flex items-center p-3 hover:bg-slate-800 rounded-lg transition">
+                <i class="fas fa-chart-line mr-3"></i> 포트폴리오 관리 (리터놀 등)
+            </button>
+            <button onclick="showPage('settings')" class="w-full flex items-center p-3 hover:bg-slate-800 rounded-lg transition">
+                <i class="fas fa-cog mr-3"></i> 심사 프레임워크 설정
+            </button>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-10">
+        
+        <section id="page-apply" class="content-page">
+            <h2 class="text-3xl font-bold mb-6">🚀 스타트업 지원 포털</h2>
+            <div class="bg-white p-6 rounded-xl shadow-sm border">
+                <p class="text-gray-600 mb-4">투자 지원을 위해 기업 정보를 입력해주세요.</p>
+                <input type="text" placeholder="기업명" class="w-full border p-3 rounded-lg mb-4">
+                <button class="bg-indigo-600 text-white px-6 py-2 rounded-lg">분석 시작</button>
+            </div>
         </section>
 
-        <form id="applicationForm" class="space-y-6">
-            <div>
-                <label class="block text-sm font-medium text-gray-700">기업명</label>
-                <input type="text" id="companyName" class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="예: 리터놀" required>
-            </div>
-
+        <section id="page-news" class="content-page hidden">
+            <h2 class="text-3xl font-bold mb-6">📰 최신 시장 동향</h2>
             <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">핵심 기술 분야</label>
-                    <select id="techSector" class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm">
-                        <option>온디바이스 AI</option>
-                        <option>SaaS</option>
-                        <option>핀테크</option>
-                        <option>커머스/플랫폼</option>
-                    </select>
+                <div class="bg-white p-6 rounded-xl shadow-sm border">
+                    <h3 class="font-bold text-blue-600">#온디바이스 AI</h3>
+                    <p class="text-sm text-gray-500 mt-2">최신 뉴스 5건이 요약되었습니다.</p>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">희망 투자 금액 (억 원)</label>
-                    <input type="number" id="fundingAmount" class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm" placeholder="예: 10">
+                <div class="bg-white p-6 rounded-xl shadow-sm border">
+                    <h3 class="font-bold text-green-600">#반전세/부동산</h3>
+                    <p class="text-sm text-gray-500 mt-2">관심 지역 매물 업데이트 확인.</p>
                 </div>
             </div>
+        </section>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700">비즈니스 모델 및 유즈케이스</label>
-                <textarea id="businessModel" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm" placeholder="AI가 분석할 핵심 사업 내용을 입력해주세요."></textarea>
-            </div>
+        <section id="page-portfolio" class="content-page hidden">
+            <h2 class="text-3xl font-bold mb-6">📈 검토 중인 기업</h2>
+            <ul class="space-y-3">
+                <li class="bg-white p-4 rounded-lg border flex justify-between">
+                    <span>리터놀 (Returnol)</span>
+                    <span class="text-green-500 font-bold">검토 중</span>
+                </li>
+                <li class="bg-white p-4 rounded-lg border flex justify-between">
+                    <span>캐시모 (Cashmo)</span>
+                    <span class="text-orange-500 font-bold">IR 미팅 예정</span>
+                </li>
+            </ul>
+        </section>
 
-            <button type="button" onclick="analyzeApplication()" class="w-full gradient-bg text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition">
-                AI 심사역에게 검토 요청하기
-            </button>
-        </form>
-
-        <div id="resultArea" class="mt-10 p-6 bg-indigo-50 rounded-lg hidden border border-indigo-200">
-            <h3 class="text-lg font-bold text-indigo-800 mb-4">🤖 AI 실시간 심사평 (Draft)</h3>
-            <div id="aiSummary" class="text-gray-700 whitespace-pre-line"></div>
-        </div>
     </main>
 
     <script>
-        function analyzeApplication() {
-            const name = document.getElementById('companyName').value;
-            const sector = document.getElementById('techSector').value;
-            const bm = document.getElementById('businessModel').value;
-
-            if(!name) { alert('기업명을 입력해주세요!'); return; }
-
-            // 실제로는 여기서 AI API를 호출합니다. 현재는 데모용 로직입니다.
-            document.getElementById('resultArea').classList.remove('hidden');
-            document.getElementById('aiSummary').innerHTML = `
-                <b>[${name}] 기업 분석 완료</b>
-                1. 섹터 적합성: ${sector} 분야는 최근 투자 트렌드에 부합합니다.
-                2. 분석 의견: 입력하신 BM은 '${bm.substring(0, 20)}...' 내용을 기반으로 하며, 기술적 해자(Moat) 확보가 관건입니다.
-                3. 다음 단계: 구글 문서로 리포트를 자동 생성하여 심사역에게 전달할 예정입니다.
-            `;
+        function showPage(pageId) {
+            // 모든 섹션을 숨김
+            document.querySelectorAll('.content-page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            // 선택한 섹션만 보여줌
+            document.getElementById('page-' + pageId).classList.remove('hidden');
         }
     </script>
 </body>
