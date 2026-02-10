@@ -2,128 +2,102 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>AI IC Report - The Great Debate Mode</title>
+    <title>AI IC Showcase - Real API Mode</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #f8fafc; }
-        .debate-bubble { border-left: 4px solid #e2e8f0; padding-left: 1.5rem; margin-bottom: 2rem; position: relative; }
-        .guru-tag { font-size: 0.65rem; font-weight: 900; padding: 2px 8px; rounded: 4px; text-transform: uppercase; margin-bottom: 8px; display: inline-block; }
-    </style>
 </head>
-<body class="py-12 px-6">
-
+<body class="bg-slate-50 p-10">
     <div class="max-w-5xl mx-auto">
-        <div class="flex justify-between items-center mb-12 bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200">
+        <header class="mb-10 p-8 bg-white rounded-3xl shadow-sm border flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-black italic">VC_REVIEW <span class="text-indigo-600">LIVE</span></h1>
+                <p class="text-slate-400 text-xs mt-1 uppercase font-bold">Powered by Gemini 1.5 Pro Engine</p>
+            </div>
+            <input type="password" id="api-key" placeholder="Gemini API Key 입력" class="border p-2 rounded-lg text-sm w-64">
+        </header>
+
+        <section class="bg-indigo-600 p-10 rounded-[2.5rem] text-white shadow-xl mb-10">
+            <h2 class="text-xl font-bold mb-4">1. IR 자료 업로드 및 분석</h2>
             <div class="flex gap-4">
-                <input type="file" id="ir-file" class="hidden" onchange="ready()">
-                <button onclick="document.getElementById('ir-file').click()" class="bg-slate-100 px-6 py-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition">1. IR Deck Load</button>
-                <button id="run-btn" onclick="runShowcase()" class="bg-indigo-600 text-white px-10 py-3 rounded-xl font-bold text-sm opacity-30 cursor-not-allowed" disabled>2. Start 20-VC Debate</button>
+                <input type="file" id="pdf-upload" accept=".pdf" class="bg-white/10 p-3 rounded-xl flex-1 text-sm">
+                <button onclick="processAndRun()" id="run-btn" class="bg-white text-indigo-600 px-10 py-3 rounded-xl font-black hover:bg-indigo-50 transition">분석 시작</button>
             </div>
-            <div class="text-[10px] font-black text-slate-400 tracking-widest italic text-right">
-                JONGHYUK ANALYST LAB<br>VIRTUAL IC PROTOCOL V4.5
-            </div>
-        </div>
+        </section>
 
-        <div id="output" class="hidden space-y-12">
-            
-            <section class="bg-white border-4 border-slate-900 rounded-[3rem] p-12 flex justify-between items-center shadow-2xl">
-                <div>
-                    <span class="text-indigo-600 font-black text-xs tracking-widest uppercase mb-3 block underline decoration-4 underline-offset-8">Final Investment Thesis</span>
-                    <h2 id="target-name" class="text-6xl font-black tracking-tighter text-slate-900 mb-4 italic">Target</h2>
-                    <p class="text-slate-500 font-bold text-lg italic">"리터놀의 효율성과 캐시모의 확장성을 모두 갖춘 온디바이스 AI의 게임 체인저"</p>
-                </div>
-                <div class="text-right">
-                    <div class="text-8xl font-black text-slate-900 tracking-tighter">88.5</div>
-                    <p class="text-xs font-black text-green-500 mt-2">16 APPROVE / 4 PASS</p>
-                </div>
-            </section>
-
-            <section class="bg-slate-900 rounded-[3.5rem] p-12 text-white shadow-2xl relative overflow-hidden">
-                <h3 class="text-3xl font-black mb-12 italic border-b border-slate-800 pb-6 flex justify-between items-center">
-                    <span>The Great IC Debate: 5 Rounds</span>
-                    <span class="text-xs font-mono text-slate-500">Live Transcript</span>
-                </h3>
-
-                <div id="debate-flow" class="space-y-8 relative z-10">
+        <div id="result-display" class="hidden animate-in fade-in duration-1000">
+            <div class="bg-white p-12 rounded-[3rem] shadow-2xl border border-slate-200">
+                <h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest mb-6 underline decoration-4 underline-offset-8">20-Panel VC Final Report</h3>
+                <div id="ai-response" class="prose prose-slate max-w-none font-medium leading-relaxed text-slate-700">
                     </div>
-                
-                <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-600 rounded-full blur-[150px] opacity-20"></div>
-            </section>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white p-10 rounded-[2.5rem] border border-slate-200">
-                    <h4 class="font-black text-xl mb-8 tracking-tight italic">Founder's 15 Critical Q&A</h4>
-                    <ul id="qa-list" class="space-y-4 text-sm font-bold text-slate-600 italic">
-                        </ul>
-                </div>
-                <div class="bg-indigo-600 p-10 rounded-[2.5rem] text-white shadow-xl shadow-indigo-100">
-                    <h4 class="font-black text-xl mb-8 tracking-tight italic">Immediate Action Plan</h4>
-                    <ul id="action-list" class="space-y-4 text-sm font-bold text-indigo-100">
-                        </ul>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
-        function ready() {
-            const btn = document.getElementById('run-btn');
-            if(document.getElementById('ir-file').files[0]) {
-                btn.disabled = false;
-                btn.classList.remove('opacity-30', 'cursor-not-allowed');
-            }
-        }
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
-        async function runShowcase() {
-            const fileName = document.getElementById('ir-file').files[0].name.split('.')[0];
-            const btn = document.getElementById('run-btn');
-            const output = document.getElementById('output');
-            const flow = document.getElementById('debate-flow');
+        async function processAndRun() {
+            const apiKey = document.getElementById('api-key').value;
+            const fileInput = document.getElementById('pdf-upload');
+            const runBtn = document.getElementById('run-btn');
             
-            btn.innerText = "IC in Progress...";
-            btn.disabled = true;
-            output.classList.remove('hidden');
-            document.getElementById('target-name').innerText = fileName;
-            flow.innerHTML = "";
+            if(!apiKey) return alert("API Key를 입력해주세요!");
+            if(!fileInput.files[0]) return alert("PDF 파일을 선택해주세요!");
 
-            const debateData = [
-                { role: "The Bull", color: "bg-green-500", text: "이 기업의 온디바이스 최적화는 리터놀이 초기에 보여줬던 에너지 효율을 압도합니다. 이건 단순 솔루션이 아니라 인프라입니다!" },
-                { role: "The Bear", color: "bg-red-500", text: "잠깐! 기술은 좋지만 캐시모처럼 명확한 수익 모델(Revenue Stream)이 데이터로 검증되지 않았어요. 아직은 가설일 뿐입니다." },
-                { role: "Guru_Peter", color: "bg-blue-500", text: "성장률 지표를 보세요. 작년 대비 300% 성장은 시장의 굶주림을 증명합니다. 숫자가 모든 걸 말해주고 있어요." },
-                { role: "Guru_Warren", color: "bg-orange-500", text: "해자가 충분한가? 독점적인 칩셋 파트너십이 유지된다면, 경쟁자가 침범하기 어려운 아주 깊은 경제적 해자를 갖게 될 겁니다." },
-                { role: "Wild Card", color: "bg-purple-500", text: "만약 이들이 B2B가 아니라 직접 B2C 마케팅 칩셋 시장에 진출한다면? 게임의 법칙이 바뀔 수 있는 딜입니다." }
-            ];
+            runBtn.innerText = "20인 VC 소환 중...";
+            runBtn.disabled = true;
 
-            for (const item of debateData) {
-                const div = document.createElement('div');
-                div.className = "debate-bubble animate-in slide-in-from-left duration-700";
-                div.innerHTML = `
-                    <span class="guru-tag ${item.color}">${item.role}</span>
-                    <p class="text-lg font-bold leading-relaxed italic text-slate-100">"${item.text}"</p>
-                `;
-                flow.appendChild(div);
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                await new Promise(r => setTimeout(r, 1500)); // 치열한 토론 시간 연출
-            }
-
-            populateFinals();
+            // 1. PDF 텍스트 추출
+            const reader = new FileReader();
+            reader.onload = async function() {
+                const typedarray = new Uint8Array(this.result);
+                const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                let fullText = "";
+                for(let i=1; i<=pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    fullText += textContent.items.map(s => s.str).join(' ');
+                }
+                
+                // 2. Gemini API 호출 (종혁님의 20인 투심위 프롬프트 장착)
+                callGemini(apiKey, fullText);
+            };
+            reader.readAsArrayBuffer(fileInput.files[0]);
         }
 
-        function populateFinals() {
-            const qas = [
-                "1. 리터놀 모델링 대비 엣지 추론 속도가 환경별로 어떻게 차이 나는가?",
-                "2. 캐시모의 마케팅 툴과 결합 시 예상되는 데이터 전송 효율 수치는?",
-                "3. 창업팀의 핵심 인력이 독자적으로 기술 특허를 방어할 수 있는가?"
-            ];
-            const actions = [
-                "Round 1. 기술 실사(Tech DD) 및 특허 침해 여부 교차 검증",
-                "Round 2. 주요 하드웨어 제조사 레퍼런스 체크 및 파트너십 심화",
-                "Round 3. 다음 주 파트너 투심위 상정 및 최종 텀시트(Term Sheet) 조율"
-            ];
-            document.getElementById('qa-list').innerHTML = qas.map(q => `<li class="border-b border-slate-100 pb-2">${q}</li>`).join('');
-            document.getElementById('action-list').innerHTML = actions.map(a => `<li class="flex items-center"><i class="fas fa-arrow-right mr-3"></i> ${a}</li>`).join('');
+        async function callGemini(key, text) {
+            const display = document.getElementById('result-display');
+            const responseDiv = document.getElementById('ai-response');
+            display.classList.remove('hidden');
+            responseDiv.innerHTML = "20명의 VC가 토론을 시작했습니다. 잠시만 기다려주세요...";
+
+            const prompt = `
+            너는 15명의 VC Guru와 5명의 Bright Minds로 구성된 투자심의위원회다.
+            제공된 IR 자료를 읽고 다음 4단계 프로세스를 아주 디테일하게 수행해.
+            1. 데이터 추출 (시장, 기술, 팀)
+            2. 15인의 개별 투표 결과 (이름 언급하며 논거 제시)
+            3. 패널 3인의 끝장 토론 과정 (The Bull vs The Bear)
+            4. 창업자 질문 15개와 액션 플랜
+
+            분석할 IR 내용: ${text.substring(0, 10000)} // 토큰 제한 고려
+            `;
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${key}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                const data = await res.json();
+                const resultText = data.candidates[0].content.parts[0].text;
+                
+                // 마크다운 형식으로 변환하여 출력 (간단히)
+                responseDiv.innerHTML = resultText.replace(/\n/g, "<br>");
+                document.getElementById('run-btn').innerText = "분석 완료";
+            } catch (e) {
+                responseDiv.innerHTML = "에러 발생: API 키가 잘못되었거나 한도를 초과했습니다.";
+            }
         }
     </script>
 </body>
